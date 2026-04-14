@@ -1,7 +1,7 @@
-import { mkdir, writeFile, readFile, readdir, stat } from 'node:fs/promises'
+import { mkdir, writeFile, readFile, readdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { join, resolve } from 'node:path'
-import type { SketchMeta, SketchAnalysis } from '../types.js'
+import type { SketchMeta } from '../types.js'
 
 const DATA_DIR = resolve(process.env.DATA_DIR ?? './data/sketches')
 
@@ -30,8 +30,6 @@ export async function saveSketch(
     name: name || `Sketch ${new Date().toLocaleString('zh-CN')}`,
     note,
     createdAt: new Date().toISOString(),
-    analyzed: false,
-    type: 'unknown',
   }
 
   await writeFile(join(dir, 'image.png'), imageBuffer)
@@ -57,7 +55,6 @@ export async function listSketches(): Promise<SketchMeta[]> {
     }
   }
 
-  // Newest first
   return metas.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   )
@@ -76,30 +73,6 @@ export async function getSketchImage(id: string): Promise<Buffer | null> {
   return readFile(imgPath)
 }
 
-export async function getSketchAnalysis(id: string): Promise<SketchAnalysis | null> {
-  const analysisPath = join(DATA_DIR, id, 'analysis.json')
-  if (!existsSync(analysisPath)) return null
-  const raw = await readFile(analysisPath, 'utf-8')
-  return JSON.parse(raw) as SketchAnalysis
-}
-
-export async function saveSketchAnalysis(
-  id: string,
-  analysis: SketchAnalysis
-): Promise<void> {
-  const dir = join(DATA_DIR, id)
-  await writeFile(join(dir, 'analysis.json'), JSON.stringify(analysis, null, 2), 'utf-8')
-
-  // Update meta
-  const meta = await getSketchMeta(id)
-  if (meta) {
-    meta.analyzed = true
-    meta.type = analysis.type
-    await writeFile(join(dir, 'meta.json'), JSON.stringify(meta, null, 2), 'utf-8')
-  }
-}
-
 export async function sketchExists(id: string): Promise<boolean> {
-  const dir = join(DATA_DIR, id)
-  return existsSync(join(dir, 'meta.json'))
+  return existsSync(join(DATA_DIR, id, 'meta.json'))
 }

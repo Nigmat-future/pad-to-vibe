@@ -9,7 +9,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
     "hono": "^4.6.0"
   },
   "devDependencies": {

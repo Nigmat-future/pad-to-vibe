@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "start": "vite --host"
+    "dev": "npx --no vite --host",
+    "build": "tsc && npx --no vite build",
+    "preview": "npx --no vite preview",
+    "start": "npx --no vite --host"
   },
   "dependencies": {
     "@excalidraw/excalidraw": "^0.17.0",

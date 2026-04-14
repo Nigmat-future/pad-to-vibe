@@ -31,14 +31,6 @@ export function SketchesPage({ onBack }: SketchesPageProps) {
     return new Date(isoStr).toLocaleDateString('zh-CN')
   }
 
-  const typeLabel: Record<string, string> = {
-    'ui-wireframe': 'UI',
-    flowchart: '流程',
-    architecture: '架构',
-    mixed: '混合',
-    unknown: '草图',
-  }
-
   return (
     <main className="sketches-page">
       {loading && (
@@ -89,9 +81,6 @@ export function SketchesPage({ onBack }: SketchesPageProps) {
                 <div className="sketch-card__info">
                   <span className="sketch-card__name">{sketch.name}</span>
                   <div className="sketch-card__meta">
-                    {sketch.analyzed && (
-                      <span className="sketch-card__type">{typeLabel[sketch.type] ?? sketch.type}</span>
-                    )}
                     <span className="sketch-card__time mono">{formatRelativeTime(sketch.createdAt)}</span>
                   </div>
                 </div>

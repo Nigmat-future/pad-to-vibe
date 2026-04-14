@@ -31,7 +31,7 @@ app.notFound((c) => c.json({ error: 'Not found' }, 404))
 const port = parseInt(process.env.PORT ?? '3001', 10)
 
 console.log(`🎨 Pad to Vibe Server starting on http://localhost:${port}`)
-console.log(`   ANTHROPIC_API_KEY: ${process.env.ANTHROPIC_API_KEY ? '✓ configured' : '✗ missing (analysis disabled)'}`)
+console.log(`   Sketches stored at: ${process.env.DATA_DIR ?? './data/sketches'}`)
 console.log()
 
 serve({ fetch: app.fetch, port })

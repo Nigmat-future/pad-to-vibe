@@ -4,11 +4,8 @@ import {
   listSketches,
   getSketchMeta,
   getSketchImage,
-  getSketchAnalysis,
-  saveSketchAnalysis,
   sketchExists,
 } from '../services/storage.js'
-import { analyzeSketch } from '../services/analyzer.js'
 
 export const sketchesRouter = new Hono()
 
@@ -28,14 +25,6 @@ sketchesRouter.post('/', async (c) => {
   const imageBuffer = Buffer.from(arrayBuffer)
 
   const meta = await saveSketch(imageBuffer, name, note)
-
-  // Trigger async analysis (don't await — return immediately)
-  if (process.env.ANTHROPIC_API_KEY) {
-    analyzeSketch(imageBuffer)
-      .then((analysis) => saveSketchAnalysis(meta.id, analysis))
-      .catch((err) => console.error(`[analyzer] Failed for ${meta.id}:`, err))
-  }
-
   return c.json(meta, 201)
 })
 
@@ -47,25 +36,20 @@ sketchesRouter.get('/', async (c) => {
   const all = await listSketches()
   const page = all.slice(offset, offset + limit)
 
-  return c.json({
-    total: all.length,
-    items: page,
-  })
+  return c.json({ total: all.length, items: page })
 })
 
-// GET /sketches/:id — get sketch detail (meta + analysis if ready)
+// GET /sketches/:id — get sketch detail (meta + imageBase64)
 sketchesRouter.get('/:id', async (c) => {
   const id = c.req.param('id')
 
   const meta = await getSketchMeta(id)
   if (!meta) return c.json({ error: 'Sketch not found' }, 404)
 
-  const analysis = await getSketchAnalysis(id)
-
   const image = await getSketchImage(id)
   const imageBase64 = image ? image.toString('base64') : null
 
-  return c.json({ ...meta, analysis, imageBase64 })
+  return c.json({ ...meta, imageBase64 })
 })
 
 // GET /sketches/:id/image — serve the raw PNG
@@ -80,30 +64,4 @@ sketchesRouter.get('/:id/image', async (c) => {
   c.header('Content-Type', 'image/png')
   c.header('Cache-Control', 'public, max-age=3600')
   return c.body(image)
-})
-
-// GET /sketches/:id/spec — get sketch as Markdown spec (waits for analysis)
-sketchesRouter.get('/:id/spec', async (c) => {
-  const id = c.req.param('id')
-
-  if (!(await sketchExists(id))) return c.json({ error: 'Sketch not found' }, 404)
-
-  let analysis = await getSketchAnalysis(id)
-
-  // If not yet analyzed, trigger synchronous analysis now
-  if (!analysis) {
-    const image = await getSketchImage(id)
-    if (!image) return c.json({ error: 'Image not found' }, 404)
-
-    if (!process.env.ANTHROPIC_API_KEY) {
-      return c.json({ error: 'ANTHROPIC_API_KEY not configured' }, 503)
-    }
-
-    analysis = await analyzeSketch(image)
-    await saveSketchAnalysis(id, analysis)
-  }
-
-  return c.text(analysis.markdownSpec, 200, {
-    'Content-Type': 'text/markdown; charset=utf-8',
-  })
 })

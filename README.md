@@ -78,7 +78,7 @@ Replace `/path/to/pad-to-vibe` with your actual local path.
 ## 🧭 How to Use ｜ 使用方法
 
 1. Open `http://<your-computer-lan-ip>:3000` on your tablet  
-   在平板打开 `http://<你的电脑局域网IP>:3000`
+   在平板打开 `http://<your-computer-lan-ip>:3000`（替换为你电脑的局域网 IP）
 2. Draw UI wireframes, flows, or architecture sketches  
    画 UI 线框图、流程图或架构图
 3. Tap the **⬆ Sync** button  

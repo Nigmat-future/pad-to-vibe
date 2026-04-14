@@ -46,7 +46,7 @@ npm run start:web      # Tablet Web App (localhost:3000)
 
 ### 4) Open on your tablet ｜ 在平板访问
 
-`http://<your-lan-ip>:3000`
+`http://<your-computer-lan-ip>:3000`
 
 - Mac: `ifconfig | grep inet`
 - Windows: `ipconfig`
@@ -61,11 +61,7 @@ Create `.claude/settings.json` in your project (or `~/.claude/settings.json` glo
   "mcpServers": {
     "pad-to-vibe": {
       "command": "node",
-      "args": [
-        "--import",
-        "tsx/esm",
-        "/path/to/pad-to-vibe/packages/mcp/src/index.ts"
-      ],
+      "args": ["--import", "tsx/esm", "/path/to/pad-to-vibe/packages/mcp/src/index.ts"],
       "env": {
         "SERVER_URL": "http://localhost:3001"
       }
@@ -81,8 +77,8 @@ Replace `/path/to/pad-to-vibe` with your actual local path.
 
 ## 🧭 How to Use ｜ 使用方法
 
-1. Open `http://<your-lan-ip>:3000` on your tablet  
-   在平板打开 `http://<你的局域网IP>:3000`
+1. Open `http://<your-computer-lan-ip>:3000` on your tablet  
+   在平板打开 `http://<你的电脑局域网IP>:3000`
 2. Draw UI wireframes, flows, or architecture sketches  
    画 UI 线框图、流程图或架构图
 3. Tap the **⬆ Sync** button  

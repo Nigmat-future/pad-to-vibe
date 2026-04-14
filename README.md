@@ -1,53 +1,60 @@
 # Pad to Vibe
 
-> Sketch on your tablet. Code with Claude.
+> **Sketch on your tablet. Code with Claude.**  
+> **在平板上画草图，让 Claude 直接理解并生成代码。**
 
-在平板上画草图，让 Claude Code 直接理解你的设计意图并生成代码。
+---
 
-```
-平板 Excalidraw 画布
-       ↓ 点击同步
-  本地服务器 (3001)
-  + Claude Vision 分析
-       ↓ MCP 工具
-    Claude Code
-  "帮我实现这个草图"
+## ✨ Overview ｜ 项目简介
+
+Pad to Vibe connects tablet sketching with Claude Code through MCP.  
+Pad to Vibe 通过 MCP 把平板草图和 Claude Code 连接起来。
+
+```text
+Tablet Excalidraw Canvas
+        ↓ Sync
+Local Server (3001) + Claude Vision
+        ↓ MCP Tools
+Claude Code
+“Implement this sketch for me”
 ```
 
 ---
 
-## 快速开始
+## 🚀 Quick Start ｜ 快速开始
 
-### 1. 安装依赖
+### 1) Install dependencies ｜ 安装依赖
 
 ```bash
 npm install
 ```
 
-### 2. 配置 API Key
+### 2) Configure API key ｜ 配置 API Key
 
 ```bash
 cp packages/server/.env.example packages/server/.env
-# 编辑 .env，填入你的 ANTHROPIC_API_KEY
+# Edit .env and set ANTHROPIC_API_KEY
+# 编辑 .env，填入 ANTHROPIC_API_KEY
 ```
 
-### 3. 启动服务器 + Web App
+### 3) Start server + web app ｜ 启动服务端和 Web 应用
 
 ```bash
-# 在你的电脑上运行：
-npm run start:server   # 后端 API (localhost:3001)
-npm run start:web      # 平板 Web App (localhost:3000)
+npm run start:server   # Backend API (localhost:3001)
+npm run start:web      # Tablet Web App (localhost:3000)
 ```
 
-### 4. 平板访问
+### 4) Open on your tablet ｜ 在平板访问
 
-在平板浏览器中访问：`http://你电脑的局域网IP:3000`
+`http://<your-lan-ip>:3000`
 
-> 查看你的局域网 IP：Mac `ifconfig | grep inet`，Windows `ipconfig`
+- Mac: `ifconfig | grep inet`
+- Windows: `ipconfig`
 
-### 5. 配置 Claude Code 的 MCP
+### 5) Configure MCP for Claude Code ｜ 配置 Claude Code 的 MCP
 
-在你的项目目录下创建 `.claude/settings.json`（或全局 `~/.claude/settings.json`）：
+Create `.claude/settings.json` in your project (or `~/.claude/settings.json` globally):  
+在项目目录创建 `.claude/settings.json`（或全局 `~/.claude/settings.json`）：
 
 ```json
 {
@@ -55,7 +62,8 @@ npm run start:web      # 平板 Web App (localhost:3000)
     "pad-to-vibe": {
       "command": "node",
       "args": [
-        "--import", "tsx/esm",
+        "--import",
+        "tsx/esm",
         "/path/to/pad-to-vibe/packages/mcp/src/index.ts"
       ],
       "env": {
@@ -66,72 +74,78 @@ npm run start:web      # 平板 Web App (localhost:3000)
 }
 ```
 
-将 `/path/to/pad-to-vibe` 替换为本项目的实际路径。
+Replace `/path/to/pad-to-vibe` with your actual local path.  
+将 `/path/to/pad-to-vibe` 替换为你的本地实际路径。
 
 ---
 
-## 使用方法
+## 🧭 How to Use ｜ 使用方法
 
-1. 在平板上打开 `http://电脑IP:3000`
-2. 用触控笔画 UI 线框图、流程图或架构图
-3. 点击右上角「⬆ 同步」按钮
-4. 在 Claude Code 中说：
+1. Open `http://<your-lan-ip>:3000` on your tablet  
+   在平板打开 `http://<你的局域网IP>:3000`
+2. Draw UI wireframes, flows, or architecture sketches  
+   画 UI 线框图、流程图或架构图
+3. Tap the **⬆ Sync** button  
+   点击右上角 **⬆ 同步**
+4. Ask Claude Code:
 
+```text
+Check my latest sketch and implement it.
+看看我最新的草图，帮我实现它。
 ```
-看看我最新的草图，帮我实现它
-```
 
-Claude Code 会调用 `get_latest_sketch` 工具，看到你的草图并生成代码。
+Claude Code will call `get_latest_sketch` and generate code from your sketch.  
+Claude Code 会调用 `get_latest_sketch`，读取草图并生成代码。
 
 ---
 
-## MCP 工具
+## 🛠 MCP Tools ｜ MCP 工具
 
-| 工具 | 说明 |
-|------|------|
-| `list_sketches` | 列出所有草图（名称、时间、类型）|
-| `get_sketch` | 获取草图图片 + AI 分析描述 |
-| `get_sketch_as_spec` | 将草图转成结构化 Markdown PRD |
-| `get_latest_sketch` | 获取最新草图（最常用）|
+| Tool | English | 中文 |
+|------|---------|------|
+| `list_sketches` | List all sketches (name, timestamp, type) | 列出所有草图（名称、时间、类型） |
+| `get_sketch` | Get sketch image + AI analysis | 获取草图图片 + AI 分析 |
+| `get_sketch_as_spec` | Convert sketch into structured Markdown PRD | 将草图转为结构化 Markdown PRD |
+| `get_latest_sketch` | Get latest sketch (most used) | 获取最新草图（最常用） |
 
 ---
 
-## 项目结构
+## 📁 Project Structure ｜ 项目结构
 
-```
+```text
 pad-to-vibe/
 ├── packages/
-│   ├── server/   # Hono API 服务器（端口 3001）
-│   ├── mcp/      # MCP Server（与 Claude Code 通信）
-│   └── web/      # React + Excalidraw PWA（端口 3000）
+│   ├── server/   # Hono API server (3001) / Hono API 服务器（3001）
+│   ├── mcp/      # MCP server for Claude Code / 与 Claude Code 通信
+│   └── web/      # React + Excalidraw PWA (3000) / 平板 Web 应用（3000）
 ├── package.json  # npm workspaces monorepo
-├── PRD.md        # 产品需求文档
-└── DESIGN.md     # 设计文档（Atelier Dark）
+├── PRD.md        # Product requirements / 产品需求文档
+└── DESIGN.md     # Design document / 设计文档
 ```
 
 ---
 
-## 环境变量
+## 🔐 Environment Variables ｜ 环境变量
 
-`packages/server/.env`：
+`packages/server/.env`
 
-| 变量 | 默认值 | 说明 |
-|------|--------|------|
-| `ANTHROPIC_API_KEY` | 必填 | Claude Vision API Key |
-| `PORT` | `3001` | 服务器端口 |
-| `DATA_DIR` | `./data/sketches` | 草图存储目录 |
+| Variable | Default | English | 中文 |
+|----------|---------|---------|------|
+| `ANTHROPIC_API_KEY` | required | Claude Vision API key | Claude Vision API Key（必填） |
+| `PORT` | `3001` | Server port | 服务端口 |
+| `DATA_DIR` | `./data/sketches` | Sketch storage directory | 草图存储目录 |
 
-`packages/mcp/`（通过 MCP 配置的 env 传入）：
+`packages/mcp/` (via MCP env) / （通过 MCP env 传入）
 
-| 变量 | 默认值 | 说明 |
-|------|--------|------|
-| `SERVER_URL` | `http://localhost:3001` | 后端服务器地址 |
+| Variable | Default | English | 中文 |
+|----------|---------|---------|------|
+| `SERVER_URL` | `http://localhost:3001` | Backend server URL | 后端服务地址 |
 
 ---
 
-## 技术栈
+## 🧩 Tech Stack ｜ 技术栈
 
-- **前端**：React 18 + Vite + Excalidraw + PWA
-- **后端**：Node.js + Hono + @anthropic-ai/sdk
-- **MCP**：@modelcontextprotocol/sdk (stdio)
-- **存储**：本地文件系统（MVP，无数据库）
+- **Frontend / 前端**: React 18 + Vite + Excalidraw + PWA
+- **Backend / 后端**: Node.js + Hono + @anthropic-ai/sdk
+- **MCP**: @modelcontextprotocol/sdk (stdio)
+- **Storage / 存储**: Local filesystem (MVP, no DB) / 本地文件系统（MVP，无数据库）

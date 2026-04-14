@@ -1,0 +1,15 @@
+.sketch-canvas {
+  position: fixed;
+  top: calc(48px + env(safe-area-inset-top, 0));
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Excalidraw fills this container */
+}
+
+/* Override Excalidraw container to match Atelier Dark */
+.sketch-canvas .excalidraw {
+  --color-surface-high: var(--gray-900);
+  --color-surface-low: var(--gray-950);
+  --color-primary: var(--amber-500);
+}

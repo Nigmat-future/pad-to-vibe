@@ -1,0 +1,137 @@
+.sketches-page {
+  position: fixed;
+  top: calc(48px + env(safe-area-inset-top, 0));
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-background);
+  padding: var(--space-md);
+  padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0));
+}
+
+.sketches-page__loading,
+.sketches-page__empty,
+.sketches-page__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: 300px;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.sketches-page__empty-icon {
+  font-size: 48px;
+  margin-bottom: var(--space-sm);
+  opacity: 0.5;
+}
+
+.sketches-page__empty h2 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+.sketches-page__error {
+  color: var(--color-error);
+}
+
+.sketches-page__header {
+  margin-bottom: var(--space-md);
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+/* Grid */
+.sketches-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .sketches-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .sketches-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Card */
+.sketch-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--duration-normal) var(--ease-out),
+              transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.sketch-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.sketch-card__thumb {
+  aspect-ratio: 4 / 3;
+  background: #1A1A18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.sketch-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sketch-card__thumb--fallback::after {
+  content: '✏️';
+  font-size: 32px;
+  opacity: 0.3;
+}
+
+.sketch-card__info {
+  padding: var(--space-sm);
+}
+
+.sketch-card__name {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-foreground);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sketch-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: 2px;
+}
+
+.sketch-card__type {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+}
+
+.sketch-card__time {
+  font-size: 11px;
+  color: var(--color-muted);
+}

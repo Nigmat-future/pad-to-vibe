@@ -1,0 +1,20 @@
+{
+  "name": "pad-to-vibe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bridge between tablet sketches and Claude Code via MCP",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "npm run start:server & npm run start:web",
+    "start:server": "npm run start --workspace=packages/server",
+    "start:web": "npm run dev --workspace=packages/web",
+    "start:mcp": "npm run start --workspace=packages/mcp",
+    "build": "npm run build --workspaces",
+    "dev": "npm run start"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
